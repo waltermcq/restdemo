@@ -1,10 +1,13 @@
 package com.wam.respository
 
+import com.wam.model.Contact
+import com.wam.model.Contacts
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
@@ -27,8 +30,8 @@ object DatabaseFactory {
         Database.connect(createHikariDataSource())
 
         transaction {
-            TODO("SchemaUtils.create() tables")
-            TODO("create some init / test data here")
+            SchemaUtils.create(Contacts)
+            // create init / test data here
         }
     }
 
