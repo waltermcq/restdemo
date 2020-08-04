@@ -1,5 +1,6 @@
 package com.wam
 
+import com.wam.route.contacts
 import io.ktor.application.*
 import io.ktor.http.cio.websocket.FrameType.Companion.get
 import io.ktor.response.*
@@ -16,6 +17,7 @@ fun Application.module(testing: Boolean = false) {
         get("/") {
             call.respondText("hello from restdemo")
         }
+        contacts()
     }
 }
 
