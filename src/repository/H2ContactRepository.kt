@@ -4,6 +4,7 @@ import com.wam.model.Contact
 import com.wam.model.Contacts
 import com.wam.respository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
+import java.lang.IllegalArgumentException
 
 class H2ContactRepository : ContactRepository {
     override suspend fun addContact(nameFirst: String,
@@ -26,7 +27,7 @@ class H2ContactRepository : ContactRepository {
                     it[zip] = zip
                     //phone
                 }
-            val result = insertStatement.resultedValues?.get(0)
+            val result = insertStatement.resultedValues?.get(0)  // if we dont need new contact, just return Unit
             if (result != null) {
                 serializeContact(result)
             } else {
@@ -35,9 +36,13 @@ class H2ContactRepository : ContactRepository {
         }
 
 
-    override suspend fun getContactById(id: Int): Contact? {
-        TODO("Not yet implemented")
-    }
+    override suspend fun getContactById(id: Int): Contact? =
+        dbQuery {
+            Contacts.select {
+                (Contacts.id eq id)
+            }.mapNotNull { serializeContact(it) }
+                .singleOrNull()
+        }
 
     override suspend fun getAllContacts(): List<Contact> {
         return dbQuery {
@@ -49,10 +54,19 @@ class H2ContactRepository : ContactRepository {
 
     override suspend fun updateContactById(id: Int): Contact {
         TODO("Not yet implemented")
+//        return dbQuery {
+//            Contacts.update {}
+//        }
     }
 
     override suspend fun deleteContactById(id: Int): Boolean {
-        TODO("Not yet implemented")
+        // if the contact doesn't exist, throw the warning in this layer instead of from e.g. the DB
+        if (getContactById(id) == null) {
+            throw IllegalArgumentException("No contact with id $id exists")
+        }
+        return dbQuery {
+            Contacts.deleteWhere { (Contacts.id eq id) } > 0
+        }
     }
 
     //serialize
