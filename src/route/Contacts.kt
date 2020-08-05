@@ -26,19 +26,9 @@ fun Route.contacts(db: ContactRepository) {
     POST /contacts
      */
     post(CONTACTS) {
-        val params = call.receiveParameters()
 
-        val firstName = params["firstName"] ?: throw IllegalArgumentException("Missing param: firstName")
-        val middleName = params["middleName"] ?: throw IllegalArgumentException("Missing param: middleName")
-        val lastName = params["lastName"] ?: throw IllegalArgumentException("Missing param: lastName")
-        val street = params["street"] ?: throw IllegalArgumentException("Missing param: street")
-        val city = params["city"] ?: throw IllegalArgumentException("Missing param: city")
-        val state = params["state"] ?: throw IllegalArgumentException("Missing param: state")
-        val zip = params["zip"] ?: throw IllegalArgumentException("Missing param: zip")
-        val phoneNumber = params["phoneNumber"] ?: throw IllegalArgumentException("Missing param: phoneNumber")
-        val phoneType = params["lastName"] ?: throw IllegalArgumentException("Missing param: phoneType")
+        // input validation and sanitizer would go here
 
-        // input validation and sanitizer goes here
         try {
             val newContact = db.addContact(
                 firstName,
