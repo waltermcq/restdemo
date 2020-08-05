@@ -18,14 +18,16 @@ class H2ContactRepository : ContactRepository {
         dbQuery {
             val insertStatement =
                 Contacts.insert {
-                    it[firstName] = firstName
-                    it[middleName] = middleName
-                    it[lastName] = lastName
-                    it[street] = street
-                    it[city] = city
-                    it[state] = state
-                    it[zip] = zip
-                    //phone
+                    it[firstName] = nameFirst
+                    it[middleName] = nameMiddle
+                    it[lastName] = nameLast
+                    it[street] = addressStreet
+                    it[city] = addressCity
+                    it[state] = addressState
+                    it[zip] = addressZip
+                    //TODO phoneType, phoneNumber
+                    it[phoneType] = ""
+                    it[phoneNumber] = ""
                 }
             val result = insertStatement.resultedValues?.get(0)  // if we dont need new contact, just return Unit
             if (result != null) {

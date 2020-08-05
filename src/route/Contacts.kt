@@ -1,8 +1,10 @@
 package com.wam.route
 
 import com.wam.repository.ContactRepository
+import com.wam.request.ContactApiRequest
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
+import io.ktor.request.receive
 import io.ktor.request.receiveParameters
 import io.ktor.response.respond
 import io.ktor.response.respondText
@@ -26,19 +28,20 @@ fun Route.contacts(db: ContactRepository) {
     POST /contacts
      */
     post(CONTACTS) {
-
-        // input validation and sanitizer would go here
-
         try {
+            val apiRequest = call.receive<ContactApiRequest>()
+
+            // input validation and sanitizer could go here
+
             val newContact = db.addContact(
-                firstName,
-                middleName,
-                lastName,
-                street,
-                city,
-                state,
-                zip,
-                mapOf(phoneType to phoneNumber)
+                apiRequest.firstName,
+                apiRequest.middleName,
+                apiRequest.lastName,
+                apiRequest.street,
+                apiRequest.city,
+                apiRequest.state,
+                apiRequest.zip,
+                mapOf(apiRequest.phoneType to apiRequest.phoneNumber)
             )
             if (newContact != null) {
                 call.respond(newContact)
