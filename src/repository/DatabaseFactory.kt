@@ -13,7 +13,7 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object DatabaseFactory {
 
     /*
-    Create and configure Hikari connection pooler with H2
+    Create and configure Hikari connection pooling with H2
      */
     private fun createHikariDataSource(): HikariDataSource {
         val dbConfig = HikariConfig()
@@ -28,7 +28,6 @@ object DatabaseFactory {
 
     fun initDatabase() {
         Database.connect(createHikariDataSource())
-
         transaction {
             SchemaUtils.create(Contacts)
             // create init / test data here
