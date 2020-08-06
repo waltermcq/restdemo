@@ -1,20 +1,13 @@
 package restdemo.repository
 
-import restdemo.model.Contact
-import restdemo.model.ContactsTable
 import restdemo.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
-import restdemo.model.Phone
+import restdemo.model.*
 import java.lang.IllegalArgumentException
 
 class H2ContactRepository : IContactRepository {
-    override suspend fun addContact(nameFirst: String,
-                                    nameMiddle: String,
-                                    nameLast: String,
-                                    addressStreet: String,
-                                    addressCity: String,
-                                    addressState: String,
-                                    addressZip: String,
+    override suspend fun addContact(name: ContactName,
+                                    address: Address,
                                     telephone: List<Phone>) : Contact? {
 
         // find cleaner / idiomatic way to do this
@@ -37,13 +30,13 @@ class H2ContactRepository : IContactRepository {
         return dbQuery {
             val insertStatement =
                 ContactsTable.insert {
-                    it[firstName] = nameFirst
-                    it[middleName] = nameMiddle
-                    it[lastName] = nameLast
-                    it[street] = addressStreet
-                    it[city] = addressCity
-                    it[state] = addressState
-                    it[zip] = addressZip
+                    it[firstName] = name.first
+                    it[middleName] = name.middle
+                    it[lastName] = name.last
+                    it[street] = address.street
+                    it[city] = address.city
+                    it[state] = address.state
+                    it[zip] = address.zip
                     it[phoneHome] = homePhone
                     it[phoneWork] =  workPhone
                     it[phoneMobile] = mobilePhone
@@ -74,13 +67,8 @@ class H2ContactRepository : IContactRepository {
     }
 
     override suspend fun updateContactById(id: Int,
-                                           nameFirst: String,
-                                           nameMiddle: String,
-                                           nameLast: String,
-                                           addressStreet: String,
-                                           addressCity: String,
-                                           addressState: String,
-                                           addressZip: String,
+                                           name: ContactName,
+                                           address: Address,
                                            telephone: List<Phone>) : Boolean {
 
         val homePhoneList = telephone.filter {it.type == "home"}
@@ -100,13 +88,13 @@ class H2ContactRepository : IContactRepository {
 
         return dbQuery {
             ContactsTable.update({ ContactsTable.id eq id }) {
-                it[firstName] = nameFirst
-                it[middleName] = nameMiddle
-                it[lastName] = nameLast
-                it[street] = addressStreet
-                it[city] = addressCity
-                it[state] = addressState
-                it[zip] = addressZip
+                it[firstName] = name.first
+                it[middleName] = name.middle
+                it[lastName] = name.last
+                it[street] = address.street
+                it[city] = address.city
+                it[state] = address.state
+                it[zip] = address.zip
                 it[phoneHome] = homePhone
                 it[phoneWork] = mobilePhone
                 it[phoneMobile] = workPhone
@@ -143,13 +131,13 @@ class H2ContactRepository : IContactRepository {
 
         return Contact(
             contactId = row[ContactsTable.id].value,
-            firstName = row[ContactsTable.firstName],
-            middleName = row[ContactsTable.middleName],
-            lastName = row[ContactsTable.lastName],
-            street = row[ContactsTable.street],
-            city = row[ContactsTable.city],
-            state = row[ContactsTable.state],
-            zip = row[ContactsTable.zip],
+            name = ContactName(row[ContactsTable.firstName],
+                               row[ContactsTable.middleName],
+                               row[ContactsTable.lastName]),
+            address = Address(row[ContactsTable.street],
+                              row[ContactsTable.city],
+                              row[ContactsTable.state],
+                              row[ContactsTable.zip]),
             phone = validPhonesList.toList()
         )
     }

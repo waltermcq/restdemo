@@ -33,9 +33,9 @@ object DatabaseFactory {
 
             // create init / test data here
             ContactsTable.insert {
-                it[firstName] = "john"
-                it[middleName] = "tester"
-                it[lastName] = "smith"
+                it[firstName] = "test1"
+                it[middleName] = "test2"
+                it[lastName] = "test3"
                 it[street] = "street"
                 it[city] = "boston"
                 it[state] = "MA"

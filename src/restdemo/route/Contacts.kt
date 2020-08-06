@@ -34,13 +34,8 @@ fun Route.contacts(db: IContactRepository) {
             // input validation and sanitizer could go here
 
             val newContact = db.addContact(
-                apiRequest.firstName,
-                apiRequest.middleName,
-                apiRequest.lastName,
-                apiRequest.street,
-                apiRequest.city,
-                apiRequest.state,
-                apiRequest.zip,
+                apiRequest.name,
+                apiRequest.address,
                 apiRequest.phone
             )
             if (newContact != null) {
@@ -66,13 +61,8 @@ fun Route.contacts(db: IContactRepository) {
             // input validation and sanitizer could go here
 
             val isUpdated = db.updateContactById(id.toInt(),
-                apiRequest.firstName,
-                apiRequest.middleName,
-                apiRequest.lastName,
-                apiRequest.street,
-                apiRequest.city,
-                apiRequest.state,
-                apiRequest.zip,
+                apiRequest.name,
+                apiRequest.address,
                 apiRequest.phone
             )
             if (isUpdated) {
