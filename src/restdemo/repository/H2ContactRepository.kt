@@ -17,6 +17,8 @@ class H2ContactRepository : IContactRepository {
                                     addressZip: String,
                                     telephone: List<Phone>) : Contact? {
 
+        // find cleaner / idiomatic way to do this
+
         val homePhoneList = telephone.filter {it.type == "home"}
         val workPhoneList = telephone.filter {it.type == "work"}
         val mobilePhoneList = telephone.filter {it.type == "mobile"}
@@ -106,8 +108,8 @@ class H2ContactRepository : IContactRepository {
                 it[state] = addressState
                 it[zip] = addressZip
                 it[phoneHome] = homePhone
-                it[phoneMobile] = workPhone
                 it[phoneWork] = mobilePhone
+                it[phoneMobile] = workPhone
             } > 0
         }
     }
@@ -128,7 +130,7 @@ class H2ContactRepository : IContactRepository {
         // add only valid (wrapped) phone numbers to list
         val validPhonesList = mutableListOf<Phone>()
 
-        // refactor: more idiomatic to use ?.let {}
+        // refactor: it's more idiomatic to use ?.let {}
         if (row[ContactsTable.phoneHome] != null) {
             validPhonesList.add(Phone(type="home", number=row[ContactsTable.phoneHome]!!))
         }

@@ -36,13 +36,13 @@ object DatabaseFactory {
                 it[firstName] = "john"
                 it[middleName] = "tester"
                 it[lastName] = "smith"
-                it[street] = "500 boylston street"
+                it[street] = "street"
                 it[city] = "boston"
                 it[state] = "MA"
-                it[zip] = "02116"
-                it[phoneHome] = "6173732210"
-                it[phoneMobile] = "9999999999"
-                it[phoneWork] = "2222222222"
+                it[zip] = "02120"
+                it[phoneHome] = "2222222222"
+                it[phoneMobile] = "5555555555"
+                it[phoneWork] = "9999999999"
             }
 
         }

@@ -41,7 +41,7 @@ fun Route.contacts(db: IContactRepository) {
                 apiRequest.city,
                 apiRequest.state,
                 apiRequest.zip,
-                mapOf(apiRequest.phoneType to apiRequest.phoneNumber)
+                apiRequest.phone
             )
             if (newContact != null) {
                 call.respond(newContact)
@@ -73,7 +73,7 @@ fun Route.contacts(db: IContactRepository) {
                 apiRequest.city,
                 apiRequest.state,
                 apiRequest.zip,
-                mapOf(apiRequest.phoneType to apiRequest.phoneNumber)
+                apiRequest.phone
             )
             if (isUpdated) {
                 call.respondText("Contact id $id updated", status = HttpStatusCode.OK)
