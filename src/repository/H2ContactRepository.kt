@@ -54,12 +54,29 @@ class H2ContactRepository : ContactRepository {
         }
     }
 
-    override suspend fun updateContactById(id: Int): Contact {
-        TODO("Not yet implemented")
-//        return dbQuery {
-//            Contacts.update {}
-//        }
-    }
+    override suspend fun updateContactById(id: Int,
+                                           nameFirst: String,
+                                           nameMiddle: String,
+                                           nameLast: String,
+                                           addressStreet: String,
+                                           addressCity: String,
+                                           addressState: String,
+                                           addressZip: String,
+                                           telephone: Map<String, String>) : Boolean =
+         dbQuery {
+            Contacts.update({ Contacts.id eq id }) {
+                it[firstName] = nameFirst
+                it[middleName] = nameMiddle
+                it[lastName] = nameLast
+                it[street] = addressStreet
+                it[city] = addressCity
+                it[state] = addressState
+                it[zip] = addressZip
+                //TODO phoneType, phoneNumber
+                it[phoneType] = ""
+                it[phoneNumber] = ""
+            } > 0
+        }
 
     override suspend fun deleteContactById(id: Int): Boolean {
         // if the contact doesn't exist, throw the warning in this layer instead of from e.g. the DB
