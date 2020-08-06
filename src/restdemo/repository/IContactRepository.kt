@@ -1,9 +1,9 @@
-package com.wam.repository
+package restdemo.repository
 
-import com.wam.model.Contact
-import com.wam.model.Contacts
+import restdemo.model.Contact
+import restdemo.model.Phone
 
-interface ContactRepository {
+interface IContactRepository {
     suspend fun addContact(nameFirst: String,
                            nameMiddle: String,
                            nameLast: String,
@@ -11,7 +11,7 @@ interface ContactRepository {
                            addressCity: String,
                            addressState: String,
                            addressZip: String,
-                           telephone: Map<String, String>) : Contact?
+                           telephone: List<Phone>) : Contact?
     suspend fun getContactById(id: Int): Contact?
     suspend fun getAllContacts(): List<Contact?>
     suspend fun updateContactById(id: Int,
@@ -22,6 +22,6 @@ interface ContactRepository {
                                   addressCity: String,
                                   addressState: String,
                                   addressZip: String,
-                                  telephone: Map<String, String>) : Boolean
+                                  telephone: List<Phone>) : Boolean
     suspend fun deleteContactById(id: Int): Boolean
 }

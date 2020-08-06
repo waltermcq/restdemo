@@ -1,4 +1,6 @@
-package com.wam.request
+package restdemo.request
+
+import restdemo.model.Phone
 
 data class ContactApiRequest(
     val firstName: String,
@@ -8,6 +10,5 @@ data class ContactApiRequest(
     val city: String,
     val state: String,
     val zip: String,
-    val phoneType: String,
-    val phoneNumber : String
+    val phone: List<Phone>
 )

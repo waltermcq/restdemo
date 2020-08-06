@@ -1,22 +1,19 @@
-package com.wam.route
+package restdemo.route
 
-import com.wam.repository.ContactRepository
-import com.wam.request.ContactApiRequest
+import restdemo.repository.IContactRepository
+import restdemo.request.ContactApiRequest
 import io.ktor.application.call
 import io.ktor.http.HttpStatusCode
 import io.ktor.request.document
-import io.ktor.request.path
 import io.ktor.request.receive
-import io.ktor.request.receiveParameters
 import io.ktor.response.respond
 import io.ktor.response.respondText
 import io.ktor.routing.*
-import java.lang.IllegalArgumentException
 
 const val CONTACTS = "/contacts"
 const val CONTACTS_ID = "/contacts/{id}"
 
-fun Route.contacts(db: ContactRepository) {
+fun Route.contacts(db: IContactRepository) {
 
     /*
     List all contacts
@@ -44,7 +41,7 @@ fun Route.contacts(db: ContactRepository) {
                 apiRequest.city,
                 apiRequest.state,
                 apiRequest.zip,
-                mapOf(apiRequest.phoneType to apiRequest.phoneNumber)
+                apiRequest.phone
             )
             if (newContact != null) {
                 call.respond(newContact)
@@ -76,7 +73,7 @@ fun Route.contacts(db: ContactRepository) {
                 apiRequest.city,
                 apiRequest.state,
                 apiRequest.zip,
-                mapOf(apiRequest.phoneType to apiRequest.phoneNumber)
+                apiRequest.phone
             )
             if (isUpdated) {
                 call.respondText("Contact id $id updated", status = HttpStatusCode.OK)
