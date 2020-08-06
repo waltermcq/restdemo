@@ -1,4 +1,4 @@
-package com.wam.model
+package restdemo.model
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
@@ -12,9 +12,9 @@ data class Contact(val contactId: Int,
                    val city: String,
                    val state: String,
                    val zip: String,
-                   val phone: MutableMap<String, String>) : Serializable // consider using an enum or wrapper for type
+                   val phone: Map<String, String>) : Serializable // consider using an enum or wrapper for type
 
-object Contacts : IntIdTable() {
+object ContactsTable : IntIdTable() {
     val firstName = varchar("first_name", 255)
     val middleName= varchar("middle_name", 255)
     val lastName= varchar("last_name", 255)

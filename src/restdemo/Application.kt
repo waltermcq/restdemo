@@ -1,16 +1,14 @@
-package com.wam
+package restdemo
 
-import com.wam.repository.H2ContactRepository
-import com.wam.respository.DatabaseFactory
-import com.wam.route.contacts
+import restdemo.repository.H2ContactRepository
+import restdemo.repository.DatabaseFactory
+import restdemo.route.contacts
 import io.ktor.application.*
 import io.ktor.features.ContentNegotiation
 import io.ktor.features.DefaultHeaders
 import io.ktor.gson.gson
-import io.ktor.http.cio.websocket.FrameType.Companion.get
-import io.ktor.response.*
-import io.ktor.request.*
 import io.ktor.routing.*
+import restdemo.repository.IContactRepository
 import java.text.DateFormat
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
@@ -20,21 +18,27 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 fun Application.module(testing: Boolean = false) {
 
     install(DefaultHeaders)
+
+    DatabaseFactory.initDatabase()
+    val database = H2ContactRepository()
+
+//    routing {
+//        contacts(database)
+//    }
+    routeModule(database)
+}
+
+@kotlin.jvm.JvmOverloads
+fun Application.routeModule(db: IContactRepository) {
+
     install(ContentNegotiation) {
         gson {
             setDateFormat(DateFormat.LONG)
             setPrettyPrinting()
         }
     }
-
-    DatabaseFactory.initDatabase()
-    val database = H2ContactRepository()
-
     routing {
-//        get("/") {
-//            call.respondText("hello from restdemo")
-//        }
-        contacts(database)
+        contacts(db)
     }
 }
 

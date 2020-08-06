@@ -1,4 +1,4 @@
-package com.wam.request
+package restdemo.request
 
 data class ContactApiRequest(
     val firstName: String,

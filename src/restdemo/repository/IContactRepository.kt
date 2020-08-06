@@ -1,9 +1,8 @@
-package com.wam.repository
+package restdemo.repository
 
-import com.wam.model.Contact
-import com.wam.model.Contacts
+import restdemo.model.Contact
 
-interface ContactRepository {
+interface IContactRepository {
     suspend fun addContact(nameFirst: String,
                            nameMiddle: String,
                            nameLast: String,

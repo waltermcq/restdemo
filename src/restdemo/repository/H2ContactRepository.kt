@@ -1,12 +1,12 @@
-package com.wam.repository
+package restdemo.repository
 
-import com.wam.model.Contact
-import com.wam.model.Contacts
-import com.wam.respository.DatabaseFactory.dbQuery
+import restdemo.model.Contact
+import restdemo.model.ContactsTable
+import restdemo.repository.DatabaseFactory.dbQuery
 import org.jetbrains.exposed.sql.*
 import java.lang.IllegalArgumentException
 
-class H2ContactRepository : ContactRepository {
+class H2ContactRepository : IContactRepository {
     override suspend fun addContact(nameFirst: String,
                                     nameMiddle: String,
                                     nameLast: String,
@@ -17,7 +17,7 @@ class H2ContactRepository : ContactRepository {
                                     telephone: Map<String, String>) : Contact? =
         dbQuery {
             val insertStatement =
-                Contacts.insert {
+                ContactsTable.insert {
                     it[firstName] = nameFirst
                     it[middleName] = nameMiddle
                     it[lastName] = nameLast
@@ -40,15 +40,15 @@ class H2ContactRepository : ContactRepository {
 
     override suspend fun getContactById(id: Int): Contact? =
         dbQuery {
-            Contacts.select {
-                (Contacts.id eq id)
+            ContactsTable.select {
+                (ContactsTable.id eq id)
             }.mapNotNull { serializeContact(it) }
                 .singleOrNull()
         }
 
     override suspend fun getAllContacts(): List<Contact> {
         return dbQuery {
-            Contacts
+            ContactsTable
                 .selectAll()
                 .map { serializeContact(it) }
         }
@@ -64,7 +64,7 @@ class H2ContactRepository : ContactRepository {
                                            addressZip: String,
                                            telephone: Map<String, String>) : Boolean =
          dbQuery {
-            Contacts.update({ Contacts.id eq id }) {
+            ContactsTable.update({ ContactsTable.id eq id }) {
                 it[firstName] = nameFirst
                 it[middleName] = nameMiddle
                 it[lastName] = nameLast
@@ -73,8 +73,8 @@ class H2ContactRepository : ContactRepository {
                 it[state] = addressState
                 it[zip] = addressZip
                 //TODO phoneType, phoneNumber
-                it[phoneType] = ""
-                it[phoneNumber] = ""
+//                it[phoneType] = ""
+//                it[phoneNumber] = ""
             } > 0
         }
 
@@ -84,37 +84,37 @@ class H2ContactRepository : ContactRepository {
             throw IllegalArgumentException("No contact with id $id exists")
         }
         return dbQuery {
-            Contacts.deleteWhere { (Contacts.id eq id) } > 0
+            ContactsTable.deleteWhere { (ContactsTable.id eq id) } > 0
         }
     }
 
     //serialize
     private fun serializeContact(row: ResultRow): Contact {
 
-        //Add only valid phone numbers to map
-        //find a cleaner / kotlin idiomatic way to do this
+        // add only valid phone numbers to map
+        // find a cleaner / kotlin idiomatic way to do this, probably with a data class
         val validPhonesMap = mutableMapOf<String, String>()
 
-        if (row[Contacts.phoneHome] != null) {
-            validPhonesMap["home"] = row[Contacts.phoneHome]!!
+        if (row[ContactsTable.phoneHome] != null) {
+            validPhonesMap["home"] = row[ContactsTable.phoneHome]!!
         }
-        if (row[Contacts.phoneWork] != null) {
-            validPhonesMap["work"] = row[Contacts.phoneWork]!!
+        if (row[ContactsTable.phoneWork] != null) {
+            validPhonesMap["work"] = row[ContactsTable.phoneWork]!!
         }
-        if (row[Contacts.phoneMobile] != null) {
-            validPhonesMap["mobile"] = row[Contacts.phoneMobile]!!
+        if (row[ContactsTable.phoneMobile] != null) {
+            validPhonesMap["mobile"] = row[ContactsTable.phoneMobile]!!
         }
 
         return Contact(
-            contactId = row[Contacts.id].value,
-            firstName = row[Contacts.firstName],
-            middleName = row[Contacts.middleName],
-            lastName = row[Contacts.lastName],
-            street = row[Contacts.street],
-            city = row[Contacts.city],
-            state = row[Contacts.state],
-            zip = row[Contacts.zip],
-            phone = validPhonesMap
+            contactId = row[ContactsTable.id].value,
+            firstName = row[ContactsTable.firstName],
+            middleName = row[ContactsTable.middleName],
+            lastName = row[ContactsTable.lastName],
+            street = row[ContactsTable.street],
+            city = row[ContactsTable.city],
+            state = row[ContactsTable.state],
+            zip = row[ContactsTable.zip],
+            phone = validPhonesMap.toMap()
         )
     }
 }

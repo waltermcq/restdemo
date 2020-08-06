@@ -1,7 +1,6 @@
-package com.wam.respository
+package restdemo.repository
 
-import com.wam.model.Contact
-import com.wam.model.Contacts
+import restdemo.model.ContactsTable
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import kotlinx.coroutines.Dispatchers
@@ -30,10 +29,10 @@ object DatabaseFactory {
     fun initDatabase() {
         Database.connect(createHikariDataSource())
         transaction {
-            SchemaUtils.create(Contacts)
+            SchemaUtils.create(ContactsTable)
 
             // create init / test data here
-            Contacts.insert {
+            ContactsTable.insert {
                 it[firstName] = "john"
                 it[middleName] = "tester"
                 it[lastName] = "smith"
