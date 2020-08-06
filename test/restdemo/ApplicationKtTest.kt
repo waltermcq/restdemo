@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.Assertions.*
 import org.skyscreamer.jsonassert.JSONAssert
 import restdemo.model.Contact
+import restdemo.model.ContactName
 import restdemo.repository.IContactRepository
 
 internal class ApplicationKtTest {
@@ -21,7 +22,15 @@ internal class ApplicationKtTest {
         val dbRepo = mockk<IContactRepository>()
 
         coEvery { dbRepo.getAllContacts() } returns listOf(
-            Contact(1, "bob", "herbert", "smith", "123 Boylston St", "Boston", "MA", "02120", mutableMapOf("home" to "1234567890"))
+            Contact(1,
+                ContactName("bob", "herbert", "smith"),
+                "herbert",
+                "smith",
+                "123 Boylston St",
+                "Boston",
+                "MA",
+                "02120",
+                mutableMapOf("home" to "1234567890"))
         )    //coroutine every(); dbRepo always returns this contact
 
         withTestApplication({  //ktor mock startup

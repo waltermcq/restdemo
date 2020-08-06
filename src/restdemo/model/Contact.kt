@@ -5,13 +5,8 @@ import org.jetbrains.exposed.sql.Column
 import java.io.Serializable
 
 data class Contact(val contactId: Int,
-                   val firstName: String,
-                   val middleName: String,
-                   val lastName: String,
-                   val street: String,
-                   val city: String,
-                   val state: String,
-                   val zip: String,
+                   val name: ContactName,
+                   val address: Address,
                    val phone: List<Phone>) : Serializable // consider using an enum or wrapper for type
 
 object ContactsTable : IntIdTable() {
