@@ -12,7 +12,7 @@ data class Contact(val contactId: Int,
                    val city: String,
                    val state: String,
                    val zip: String,
-                   val phone: Map<String, String>) : Serializable // consider using an enum or wrapper for type
+                   val phone: List<Phone>) : Serializable // consider using an enum or wrapper for type
 
 object ContactsTable : IntIdTable() {
     val firstName = varchar("first_name", 255)
