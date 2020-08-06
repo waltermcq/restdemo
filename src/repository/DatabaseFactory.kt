@@ -8,6 +8,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object DatabaseFactory {
@@ -30,7 +31,20 @@ object DatabaseFactory {
         Database.connect(createHikariDataSource())
         transaction {
             SchemaUtils.create(Contacts)
+
             // create init / test data here
+            Contacts.insert {
+                it[firstName] = "john"
+                it[middleName] = "tester"
+                it[lastName] = "smith"
+                it[street] = "500 boylston street"
+                it[city] = "boston"
+                it[state] = "MA"
+                it[zip] = "02116"
+                it[phoneNumber] = "6173732210"
+                it[phoneType] = "home"
+            }
+
         }
     }
 
