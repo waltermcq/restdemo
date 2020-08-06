@@ -25,9 +25,9 @@ class H2ContactRepository : ContactRepository {
                     it[city] = addressCity
                     it[state] = addressState
                     it[zip] = addressZip
-                    //TODO phoneType, phoneNumber
-                    it[phoneType] = ""
-                    it[phoneNumber] = ""
+                    it[phoneHome] = telephone["home"]       // indexing is .get() which can return nulls
+                    it[phoneMobile] = telephone["mobile"]
+                    it[phoneWork] = telephone["work"]
                 }
             val result = insertStatement.resultedValues?.get(0)  // if we dont need new contact, just return Unit
             if (result != null) {
@@ -89,15 +89,32 @@ class H2ContactRepository : ContactRepository {
     }
 
     //serialize
-    private fun serializeContact(row: ResultRow): Contact =
-        Contact(contactId = row[Contacts.id].value,
-                firstName = row[Contacts.firstName],
-                middleName = row[Contacts.middleName],
-                lastName = row[Contacts.lastName],
-                street = row[Contacts.street],
-                city = row[Contacts.city],
-                state = row[Contacts.state],
-                zip = row[Contacts.zip],
-                phone = mapOf(row[Contacts.phoneType] to row[Contacts.phoneNumber])
+    private fun serializeContact(row: ResultRow): Contact {
+
+        //Add only valid phone numbers to map
+        //find a cleaner / kotlin idiomatic way to do this
+        val validPhonesMap = mutableMapOf<String, String>()
+
+        if (row[Contacts.phoneHome] != null) {
+            validPhonesMap["home"] = row[Contacts.phoneHome]!!
+        }
+        if (row[Contacts.phoneWork] != null) {
+            validPhonesMap["work"] = row[Contacts.phoneWork]!!
+        }
+        if (row[Contacts.phoneMobile] != null) {
+            validPhonesMap["mobile"] = row[Contacts.phoneMobile]!!
+        }
+
+        return Contact(
+            contactId = row[Contacts.id].value,
+            firstName = row[Contacts.firstName],
+            middleName = row[Contacts.middleName],
+            lastName = row[Contacts.lastName],
+            street = row[Contacts.street],
+            city = row[Contacts.city],
+            state = row[Contacts.state],
+            zip = row[Contacts.zip],
+            phone = validPhonesMap
         )
+    }
 }

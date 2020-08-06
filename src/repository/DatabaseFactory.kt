@@ -41,8 +41,9 @@ object DatabaseFactory {
                 it[city] = "boston"
                 it[state] = "MA"
                 it[zip] = "02116"
-                it[phoneNumber] = "6173732210"
-                it[phoneType] = "home"
+                it[phoneHome] = "6173732210"
+                it[phoneMobile] = "9999999999"
+                it[phoneWork] = "2222222222"
             }
 
         }
