@@ -139,7 +139,7 @@ internal class ApplicationKtTest {
             routeModule(dbRepo)
         }) {
             with(handleRequest(HttpMethod.Post, "/contacts") {
-                addHeader(HttpHeaders.ContentType, ContentType.Application.FormUrlEncoded.toString())
+                addHeader(HttpHeaders.ContentType, ContentType.Application.Json.toString())
                 setBody("""
                         {
                             "name": {
@@ -198,9 +198,17 @@ internal class ApplicationKtTest {
         }
     }
 
+    /*
+    Things to unit test:
+
+     */
+
     // test other routes
 
     // other things to test:
     // the persistence layer using mock database(s)
+    // DatabaseFactory
+    // all methods in the repository interface e.g. test H2ContactRepository.addContact() by mocking ContactsTable.insert()
+
 
 }
