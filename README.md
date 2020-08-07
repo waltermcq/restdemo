@@ -1,6 +1,6 @@
 # REST API Demo
 
-This repo is for a REST API demo, built using Kotlin, Gradle for build management/dependencies, Ktor web server, and HikariCP / Kotlin Exposed / H2 for the persistence layer.
+This repo is for a REST API demo, built using Kotlin, Gradle for build management/dependencies, Ktor web server, and HikariCP / Kotlin Exposed / H2 for the persistence layer. Unit testing is done with help from Mockk, and JSONAssert.
 
 ## How To
 
