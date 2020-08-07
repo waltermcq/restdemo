@@ -10,22 +10,9 @@ class H2ContactRepository : IContactRepository {
                                     address: Address,
                                     telephone: List<Phone>) : Contact? {
 
-        // find cleaner / idiomatic way to do this
-
-        val homePhoneList = telephone.filter {it.type == "home"}
-        val workPhoneList = telephone.filter {it.type == "work"}
-        val mobilePhoneList = telephone.filter {it.type == "mobile"}
-
-        val homePhone: String?
-        val workPhone: String?
-        val mobilePhone: String?
-
-        homePhone = if (homePhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
-        workPhone = if (workPhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
-        mobilePhone = if (mobilePhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
+        val homePhone = telephone.firstOrNull { it.type == "home" }?.number
+        val workPhone = telephone.firstOrNull {it.type == "work"}?.number
+        val mobilePhone = telephone.firstOrNull {it.type == "mobile"}?.number
 
         return dbQuery {
             val insertStatement =
@@ -71,20 +58,9 @@ class H2ContactRepository : IContactRepository {
                                            address: Address,
                                            telephone: List<Phone>) : Boolean {
 
-        val homePhoneList = telephone.filter {it.type == "home"}
-        val workPhoneList = telephone.filter {it.type == "work"}
-        val mobilePhoneList = telephone.filter {it.type == "mobile"}
-
-        val homePhone: String?
-        val workPhone: String?
-        val mobilePhone: String?
-
-        homePhone = if (homePhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
-        workPhone = if (workPhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
-        mobilePhone = if (mobilePhoneList.isNotEmpty()) {
-            homePhoneList[0].number } else { null }
+        val homePhone = telephone.firstOrNull { it.type == "home" }?.number
+        val workPhone = telephone.firstOrNull {it.type == "work"}?.number
+        val mobilePhone = telephone.firstOrNull {it.type == "mobile"}?.number
 
         return dbQuery {
             ContactsTable.update({ ContactsTable.id eq id }) {
