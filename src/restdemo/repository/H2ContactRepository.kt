@@ -10,6 +10,7 @@ class H2ContactRepository : IContactRepository {
                                     address: Address,
                                     telephone: List<Phone>) : Contact? {
 
+        // filter telephone list on type, get number or set null
         val homePhone = telephone.firstOrNull { it.type == "home" }?.number
         val workPhone = telephone.firstOrNull {it.type == "work"}?.number
         val mobilePhone = telephone.firstOrNull {it.type == "mobile"}?.number
@@ -28,7 +29,7 @@ class H2ContactRepository : IContactRepository {
                     it[phoneWork] =  workPhone
                     it[phoneMobile] = mobilePhone
                 }
-            val result = insertStatement.resultedValues?.get(0)  // if we dont need new contact, just return Unit
+            val result = insertStatement.resultedValues?.get(0)  // in future, if we dont need new contact, just return Unit
             if (result != null) {
                 serializeContact(result)
             } else {
@@ -72,8 +73,8 @@ class H2ContactRepository : IContactRepository {
                 it[state] = address.state
                 it[zip] = address.zip
                 it[phoneHome] = homePhone
-                it[phoneWork] = mobilePhone
-                it[phoneMobile] = workPhone
+                it[phoneWork] = workPhone
+                it[phoneMobile] = mobilePhone
             } > 0
         }
     }
@@ -94,7 +95,7 @@ class H2ContactRepository : IContactRepository {
         // add only valid (wrapped) phone numbers to list
         val validPhonesList = mutableListOf<Phone>()
 
-        // refactor: it's more idiomatic to use ?.let {}
+        // TODO refactor: it's more idiomatic to use ?.let {}
         if (row[ContactsTable.phoneHome] != null) {
             validPhonesList.add(Phone(type="home", number=row[ContactsTable.phoneHome]!!))
         }

@@ -19,6 +19,14 @@ import restdemo.repository.IContactRepository
 
 internal class ApplicationKtTest {
 
+    /*
+    Things to unit test in the future:
+      -The other routes
+      -The persistence layer e.g. using mock database(s)
+      -DatabaseFactory
+      -All methods in the repository interface e.g. test H2ContactRepository.addContact() by mocking ContactsTable.insert()
+     */
+
     @Test
     fun `GET _contacts returns list of contacts in dbRepo`() {
         // create mock repo
@@ -197,18 +205,4 @@ internal class ApplicationKtTest {
             }
         }
     }
-
-    /*
-    Things to unit test:
-
-     */
-
-    // test other routes
-
-    // other things to test:
-    // the persistence layer using mock database(s)
-    // DatabaseFactory
-    // all methods in the repository interface e.g. test H2ContactRepository.addContact() by mocking ContactsTable.insert()
-
-
 }
